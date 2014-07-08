@@ -1,0 +1,10 @@
+AllCops:
+  Exclude:
+    - cookbooks/**/*
+
+SingleSpaceBeforeFirstArg:
+  Enabled: false
+LineLength:
+  Max: 219
+MethodLength:
+  Max: 80
