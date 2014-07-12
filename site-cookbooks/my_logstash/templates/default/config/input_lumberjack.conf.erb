@@ -20,3 +20,18 @@ filter {
     }
   }
 }
+filter {
+  if [type] == "apache" {
+    grok {
+      match => [ "message", "%{COMBINEDAPACHELOG}" ]
+    }
+    date {
+      match => [ "timestamp", "dd/MMM/yyyy:HH:mm:ss Z", "dd/MMM/yyyy:HH:mm:ss" ]
+    }
+    geoip {
+      source => "[clientip]"
+      target => "geoip"
+      add_tag => [ "geoip" ]
+    }
+  }
+}
