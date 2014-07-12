@@ -1,0 +1,22 @@
+input {
+  lumberjack {
+    ssl_certificate => "<%= @ssl_certificate_path %>"
+    ssl_key => "<%= @ssl_key_path %>"
+    port => <%= @lumberjack_port %>
+  }
+}
+
+filter {
+  if [type] == "json_event" {
+    json {
+      source => "message"
+    }
+  }
+  if "request" in [@tags] {
+    geoip {
+      source => "[@fields][ip]"
+      target => "geoip"
+      add_tag => [ "geoip" ]
+    }
+  }
+}

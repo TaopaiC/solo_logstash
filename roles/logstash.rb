@@ -31,10 +31,12 @@ default_attributes(
         'config_templates' => {
           'input_syslog' => 'config/input_syslog.conf.erb',
           'output_stdout' => 'config/output_stdout.conf.erb',
-          'output_elasticsearch' => 'config/output_elasticsearch.conf.erb'
+          'output_elasticsearch' => 'config/output_elasticsearch.conf.erb',
+          'input_lumberjack' => 'config/input_lumberjack.conf.erb'
         },
         'config_templates_variables' => {
-          'elasticsearch_embedded' => true
+          'elasticsearch_embedded' => true,
+          'lumberjack_port' => 5043
         },
         'pattern_templates' => {
           'default' => 'patterns/custom_patterns.erb'

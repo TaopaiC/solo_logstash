@@ -26,6 +26,20 @@ logstash_service name do
   action      [:enable]
 end
 
+file "#{node['logstash']['instance']['default']['basedir']}/#{name}/etc/#{name}.crt" do
+  owner node['logstash']['instance']['default']['user']
+  group node['logstash']['instance']['default']['group']
+  content data_bag_item('logstash', name)['ssl_certificate']
+  action :create
+end
+
+file "#{node['logstash']['instance']['default']['basedir']}/#{name}/etc/#{name}.key" do
+  owner node['logstash']['instance']['default']['user']
+  group node['logstash']['instance']['default']['group']
+  content data_bag_item('logstash', name)['ssl_key']
+  action :create
+end
+
 my_templates  = node['logstash']['instance'][name]['config_templates']
 
 if my_templates.empty?
@@ -35,6 +49,11 @@ if my_templates.empty?
     'output_elasticsearch' => 'config/output_elasticsearch.conf.erb'
   }
 end
+
+instance_name = 'default'
+instance_name = name if node['logstash']['instance'].key?(name) and node['logstash']['instance'][name]['config_templates_variables']
+node.default['logstash']['instance'][instance_name]['config_templates_variables']['ssl_certificate_path'] = "#{node['logstash']['instance']['default']['basedir']}/#{name}/etc/#{name}.crt"
+node.default['logstash']['instance'][instance_name]['config_templates_variables']['ssl_key_path'] = "#{node['logstash']['instance']['default']['basedir']}/#{name}/etc/#{name}.key"
 
 logstash_config name do
   templates my_templates
