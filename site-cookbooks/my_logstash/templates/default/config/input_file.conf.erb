@@ -1,0 +1,6 @@
+input {
+  file {
+    path => [<%= Array.new(@input_file_name).map{|i| "\"#{i}\""}.join(',') %>]
+    type => ["<%= @input_file_type %>"]
+  }
+}
