@@ -3,7 +3,7 @@ description 'The role for logstash'
 
 run_list(
   'recipe[java::default]',
-  'recipe[logstash::server]'
+  'recipe[my_logstash::server]'
 )
 
 default_attributes(
@@ -17,17 +17,14 @@ default_attributes(
   'logstash' => {
     'instance' => {
       'server' => {
-        'xms' => '256M',
-        'xmx' => '256M',
+        'config_templates_cookbook' => 'my_logstash',
         'config_templates' => {
           'input_syslog' => 'config/input_syslog.conf.erb',
-          'input_file' => 'config/input_file.conf.erb',
           'output_stdout' => 'config/output_stdout.conf.erb',
           'output_elasticsearch' => 'config/output_elasticsearch.conf.erb'
         },
         'config_templates_variables' => {
-          'input_file_name' => "'/var/log/*.log', '/var/log/messages', '/var/log/syslog'",
-          'input_file_type' => "syslog"
+          'elasticsearch_embedded' => true
         },
         'pattern_templates' => {
           'default' => 'patterns/custom_patterns.erb'
